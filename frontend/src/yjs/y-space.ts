@@ -48,12 +48,10 @@ async function initializeYjsSpaceDoc(ydoc: Y.Doc, spaceData: SpaceData): Promise
 
 function initializeYjsSpaceAwarenessState(provider: WebsocketProvider) {
   const state: AwarenessState = {
-    user: {
-      id: provider.awareness.clientID,
-      name: "Anonymous",
-      color: "#" + Math.floor(Math.random() * 0xfffff).toString(16),
-      cursor: { x: 0, y: 0 },
-    },
+    id: provider.awareness.clientID,
+    name: "Anonymous",
+    color: "#" + Math.floor(Math.random() * 0xffffff).toString(16),
+    cursor: { x: 0, y: 0 },
   };
 
   provider.awareness.setLocalState(state);

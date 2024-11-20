@@ -75,13 +75,9 @@ export type SpaceData = {
 
 // ===
 
-export type AwarenessUserState = {
+export type AwarenessState = {
   id: number;
   name: string;
   color: string;
   cursor: { x: number; y: number };
-};
-
-export type AwarenessState = {
-  user: AwarenessUserState;
 };

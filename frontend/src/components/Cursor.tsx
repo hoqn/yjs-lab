@@ -13,7 +13,7 @@ export const Cursor = memo(({ x, y, color }: { x: number; y: number; color: stri
       viewBox="0 0 24 24"
       width={24}
       height={24}
-      style={{ position: "absolute", left: 0, top: 0, transition: "transform 0.2s" }}
+      style={{ position: "absolute", left: 0, top: 0, pointerEvents: "none" }}
     >
       <rect x={0} y={0} width={24} height={24} fill={color} />
     </svg>
