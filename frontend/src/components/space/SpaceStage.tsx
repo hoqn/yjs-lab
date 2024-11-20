@@ -3,16 +3,16 @@ import * as Y from "yjs";
 import { useYShared } from "../../hooks/useYShared";
 import { Edge, Node, SpaceData } from "../../yjs/types";
 import { setupYjsSpace } from "../../yjs/y-space";
+import { useYDocStore } from "../../store/ydoc";
 
 type SpaceStageProps = {
   spaceId: string;
 };
 
 export function SpaceStage({ spaceId }: SpaceStageProps) {
-  const [ydoc, setYDoc] = useState<Y.Doc | null>(null);
-  const [provider, setProvider] = useState<Y.AbstractConnector | null>(null);
+  const { ydoc, provider, setYDoc, setProvider } = useYDocStore();
 
-  const [yContext, setYContext] = useState<Y.Map<any> | null>(null);
+  const [yContext, setYContext] = useState<Y.Map<any> | undefined>(undefined);
 
   // TODO 코드 개선
   const yNodes = yContext?.get("nodes") as Y.Map<Node> | undefined;
@@ -31,9 +31,9 @@ export function SpaceStage({ spaceId }: SpaceStageProps) {
     initializeYjsSpaceDoc();
 
     return () => {
-      setYDoc(null);
-      setProvider(null);
-      setYContext(null);
+      setYDoc(undefined);
+      setProvider(undefined);
+      setYContext(undefined);
       provider?.destroy();
     };
   }, [spaceId]);
@@ -80,6 +80,10 @@ export function SpaceStage({ spaceId }: SpaceStageProps) {
           Object.entries(edges).map(([edgeId, { from, to }]) => {
             const fromNode = nodes[from];
             const toNode = nodes[to];
+
+            if (!fromNode || !toNode) {
+              return null;
+            }
 
             return (
               <line

@@ -4,10 +4,9 @@ import { SpaceStage } from "./components/space/SpaceStage";
 
 function App() {
   return (
-    <>
-      {/* <Pane /> */}
+    <Pane>
       <SpaceStage spaceId="123" />
-    </>
+    </Pane>
   );
 }
 
