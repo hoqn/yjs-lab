@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import * as Y from "yjs";
-import { WebsocketProvider } from "y-websocket";
 import { CollabService, collabServiceCtx } from "@milkdown/plugin-collab";
 import { Editor } from "@milkdown/kit/core";
 import { Ctx } from "@milkdown/kit/ctx";
