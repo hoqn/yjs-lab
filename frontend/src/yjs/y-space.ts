@@ -46,7 +46,7 @@ async function initializeYjsSpaceDoc(ydoc: Y.Doc, spaceData: SpaceData): Promise
   return ydoc;
 }
 
-function initializeYjsSpaceAwarenessState(provider: WebsocketProvider) {
+function initializeYjsSpaceAwarenessState(provider: Y.AbstractConnector) {
   const state: AwarenessState = {
     id: provider.awareness.clientID,
     name: "Anonymous",
