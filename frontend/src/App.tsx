@@ -1,10 +1,10 @@
 import "./App.css";
-import { Pane } from "./components/Pane";
+import MilkdownEditor from "./components/Editor";
 
 function App() {
   return (
     <>
-      <Pane />
+      <MilkdownEditor />
     </>
   );
 }
