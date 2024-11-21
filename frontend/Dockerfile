@@ -24,6 +24,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 # 포트 노출
 EXPOSE 80
+EXPOSE 5173
 
 # Nginx 실행
 CMD ["nginx", "-g", "daemon off;"]

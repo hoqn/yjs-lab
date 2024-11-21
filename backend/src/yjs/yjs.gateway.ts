@@ -1,53 +1,55 @@
+import { Logger } from '@nestjs/common';
 import {
-  WebSocketGateway,
-  WebSocketServer,
   OnGatewayConnection,
   OnGatewayDisconnect,
+  OnGatewayInit,
+  WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Request } from 'express';
-import { Server } from 'socket.io';
+import { parseSocketUrl } from 'src/common/utils/socket.util';
 import { YSocketIO } from 'y-socket.io/dist/server';
+import { Server, Socket } from 'socket.io';
+import { ERROR_MESSAGES } from 'src/common/constants/error.message.constants';
 import * as Y from 'yjs';
-@WebSocketGateway(3001)
-export class YjsGateway implements OnGatewayConnection, OnGatewayDisconnect {
+const SPACE = 'space';
+const NOTE = 'note';
+@WebSocketGateway(9001)
+export class YjsGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   private ysocketio: YSocketIO;
+  private readonly logger = new Logger(YjsGateway.name);
+
   constructor() {}
 
   @WebSocketServer()
   server: Server;
 
-  handleConnection() {
-    console.log('연결 성공');
+  afterInit() {
+    this.initializeSpace();
+  }
+  async handleConnection(socket: Socket) {
+    this.logger.log(`Client connected: ${socket.id}`);
+    this.logger.log(typeof this.server);
+    const url = socket.handshake?.url || '';
+    const { urlType, urlId } = parseSocketUrl(url);
+    this.logger.log(`Parsed URL - Type: ${urlType}, ID: ${urlId}`);
+  }
+
+  handleDisconnect(socket: Socket) {
+    this.logger.log(`Client disconnected: ${socket.id}`);
+  }
+
+  private async initializeSpace() {
+    this.logger.log(`initializeSpace`);
     if (!this.server) {
-      console.log('서버 초기화 실패');
       this.server = new Server();
     }
-
     this.ysocketio = new YSocketIO(this.server);
-    console.log('ysocketio 생성');
-    this.ysocketio.on('documnet update', (doc: Y.Doc) => {
-      const nodes = doc.getMap('nodes');
-      const edges = doc.getMap('edges');
-      const note = doc.getXmlFragment('note');
 
-      note.observeDeep((e) => {
-        console.log(`ysocketio 생성${e}`);
-      });
-      nodes.observe(() => {
-        const nodes = Object.values(doc.getMap('nodes').toJSON);
-        nodes.forEach((node) => {
-          console.log(node);
-        });
-      });
-      edges.observe(() => {
-        const edges = Object.values(doc.getMap('edges').toJSON);
-        edges.forEach((edge) => {
-          console.log(edge);
-        });
-      });
+    this.ysocketio.initialize();
+    this.ysocketio.on('test', async (doc: Y.Doc) => {
+      this.logger.log(`initializeSpace`);
     });
-  }
-  handleDisconnect() {
-    console.log('연결 실패');
   }
 }

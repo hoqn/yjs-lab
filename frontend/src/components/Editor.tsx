@@ -13,7 +13,7 @@ function MilkdownEditor() {
 
   useCollabEditor({
     editor: loading ? null : get() || null,
-    websocketUrl: `wss://demos.yjs.dev/ws`,
+    websocketUrl: `ws://backend:3001/`,
     roomName: "milkdown",
   });
 
